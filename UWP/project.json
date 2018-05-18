@@ -1,9 +1,9 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.6",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.4",
     "OxyPlot.Core": "1.0.0",
     "OxyPlot.Windows": "1.0.0",
-    "Zebble": "4.4.107"
+    "Zebble": "4.4.108"
   },
   "frameworks": {
     "uap10.0.10240": {}
