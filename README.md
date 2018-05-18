@@ -1,4 +1,4 @@
-[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.OxyPlot/master/Shared/Icon.png "Zebble.OxyPlot"
+[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.OxyPlot/master/Shared/Nuget/Icon.png "Zebble.OxyPlot"
 
 
 ## Zebble.OxyPlot
