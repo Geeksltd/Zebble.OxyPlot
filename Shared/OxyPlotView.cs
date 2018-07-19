@@ -22,7 +22,7 @@
             {
                 OxyplotModel = new PlotModel { Title = Title };
 
-                if (Series == null || Axes == null)
+                if (Series == null && Axes == null)
                 {
                     Device.Log.Error("Series or Axes of plot is null");
                     return;
@@ -83,7 +83,8 @@
                         default: break;
                     }
 
-                    foreach (var axis in Axes) OxyplotModel.Axes.Add(axis);
+                    if (Axes != null)
+                        foreach (var axis in Axes) OxyplotModel.Axes.Add(axis);
 
                     await Task.CompletedTask;
                 }

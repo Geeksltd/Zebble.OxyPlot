@@ -20,6 +20,7 @@
             try
             {
                 View = (OxyPlotView)renderer.View;
+                await View.InitializePlot();
                 var webView = new WebView { Html = GetHtml(View.OxyplotModel) };
                 var native = await webView.Render();
                 return native.Native();
