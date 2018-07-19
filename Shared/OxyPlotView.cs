@@ -151,7 +151,7 @@
         Task RenderPie(Series plot)
         {
             var pieSeries = new PieSeries();
-            foreach (var slice in plot.Data) pieSeries.Slices.Add(new PieSlice(slice.Label, slice.Value));
+            foreach (var slice in plot.Data) pieSeries.Slices.Add(new PieSlice(slice.Label, slice.Value) { Fill = slice.FillColor.ToOxyColor() });
             OxyplotModel.Series.Add(pieSeries);
 
             return Task.CompletedTask;
