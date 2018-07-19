@@ -153,6 +153,15 @@
         {
             var pieSeries = new PieSeries();
             foreach (var slice in plot.Data) pieSeries.Slices.Add(new PieSlice(slice.Label, slice.Value) { Fill = slice.FillColor.ToOxyColor() });
+
+            if (!plot.Config.IsLabelsEnabled)
+            {
+                pieSeries.OutsideLabelFormat = "";
+                pieSeries.TickHorizontalLength = 0.00;
+                pieSeries.TickRadialLength = 0.00;
+                pieSeries.InsideLabelFormat = "";
+            }
+
             OxyplotModel.Series.Add(pieSeries);
 
             return Task.CompletedTask;
