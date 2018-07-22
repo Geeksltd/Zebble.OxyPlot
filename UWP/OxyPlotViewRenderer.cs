@@ -70,9 +70,6 @@
 <div id='canvas-holder' style='width:{100}%'>
     <canvas id='chart-area'></canvas>
     </div>
-<div id='image-holder'>
-    <img style='width:{100}%' id='chartImage'>
-</div>
     <script>
         var config =
         {{
@@ -88,16 +85,7 @@
             }},
             options: 
             {{
-                animation: 
-                {{
-					duration: 0,
-					onComplete: function(animation) 
-                    {{
-					    var url_base64 = document.getElementById('chart-area').toDataURL('image/png');
-						document.getElementById('canvas-holder').hidden = true;
-						document.getElementById('chartImage').src = url_base64;
-            		}}
-				}},
+                animation: false,
     	        legend: {{display: false}},
                 rotation: (-0.3 * Math.PI),
                 elements: 
