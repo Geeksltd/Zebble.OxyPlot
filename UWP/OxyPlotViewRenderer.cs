@@ -1,5 +1,9 @@
 ﻿namespace Zebble
 {
+    using Windows.Storage.Streams;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media;
+    using Windows.UI.Xaml.Media.Imaging;
     using OxyPlot.Windows;
     using System.ComponentModel;
     using System.Threading.Tasks;
@@ -14,15 +18,24 @@
     {
         OxyPlotView View;
         PlotView Result;
+        Grid GridView = new Grid();
+        Windows.UI.Xaml.Controls.WebView RenderedWebView;
 
         public async Task<FrameworkElement> Render(Renderer renderer)
         {
             try
             {
                 View = (OxyPlotView)renderer.View;
+                await View.InitializePlot();
                 var webView = new WebView { Html = GetHtml(View.OxyplotModel) };
+
                 var native = await webView.Render();
-                return native.Native();
+                var result = native.Native();
+                RenderedWebView = (Windows.UI.Xaml.Controls.WebView)VisualTreeHelper.GetChild(result, 0);
+                RenderedWebView.LoadCompleted += RenderedWebView_LoadCompleted;
+                GridView.Children.Add(result);
+
+                return GridView;
             }
             catch (Exception ex)
             {
@@ -30,6 +43,15 @@
                 return null;
             }
 
+        }
+
+        private async void RenderedWebView_LoadCompleted(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
+        {
+            var base64Content = await RenderedWebView.InvokeScriptAsync("eval", new[] { "document.getElementById(\'testLink\').href" });
+            var imageView = new ImageView { ImageData = Base64Image.Parse(base64Content).FileContents };
+            var native = (await imageView.Render()).Native();
+            GridView.Children.RemoveAt(0);
+            GridView.Children.Add(native);
         }
 
         string GetHtml(PlotModel model)
@@ -58,7 +80,7 @@
                 else
                     throw new NotImplementedException("The renderer for other charts has not been implemented yet");
             }
-             var html = $@"
+            var html = $@"
 <html>
 <head>
 <title>{model.Title}</title>
@@ -71,7 +93,8 @@
     <canvas id='chart-area'></canvas>
     </div>
 <div id='image-holder'>
-    <img style='width:{100}%' id='chartImage'>
+    <img style='width:{100}%' id='chartImage' />
+    <a id='testLink'> Download </a>
 </div>
     <script>
         var config =
@@ -96,6 +119,7 @@
 					    var url_base64 = document.getElementById('chart-area').toDataURL('image/png');
 						document.getElementById('canvas-holder').hidden = true;
 						document.getElementById('chartImage').src = url_base64;
+                        document.getElementById('testLink').href = url_base64;
             		}}
 				}},
     	        legend: {{display: false}},
@@ -114,6 +138,16 @@
             var ctx =document.getElementById('chart-area').getContext('2d');
             window.myPie=new Chart(ctx, config);
         }};
+        function dataURItoBlob(dataURI) 
+        {{
+    		var binary = atob(dataURI.split(',')[1]);
+    		var array = [];
+    		for(var i = 0; i < binary.length; i++) 
+            {{
+        		array.push(binary.charCodeAt(i));
+    		}}
+    	    return new Blob([new Uint8Array(array)], {{type: 'image/png'}});
+		}};
     </script>
 </body>
 </html>";
@@ -121,5 +155,70 @@
         }
 
         public void Dispose() { }
+    }
+    class Base64Image
+    {
+        public static Base64Image Parse(string base64Content)
+        {
+            if (string.IsNullOrEmpty(base64Content))
+            {
+                throw new ArgumentNullException(nameof(base64Content));
+            }
+
+            int indexOfSemiColon = base64Content.IndexOf(";", StringComparison.OrdinalIgnoreCase);
+
+            string dataLabel = base64Content.Substring(0, indexOfSemiColon);
+
+            string contentType = dataLabel.Split(':').Last();
+
+            var startIndex = base64Content.IndexOf("base64,", StringComparison.OrdinalIgnoreCase) + 7;
+
+            var fileContents = base64Content.Substring(startIndex);
+
+            var bytes = Convert.FromBase64String(fileContents);
+
+            return new Base64Image
+            {
+                ContentType = contentType,
+                FileContents = bytes
+            };
+        }
+
+        public async Task<BitmapImage> ToImage()
+        {
+            if (FileContents == null || FileContents.Length == 0) return null;
+
+            return await GetBitmapAsync(FileContents);
+        }
+
+        static async Task<BitmapImage> GetBitmapAsync(byte[] data)
+        {
+            var bitmapImage = new BitmapImage();
+
+            using (var stream = new InMemoryRandomAccessStream())
+            {
+                using (var writer = new DataWriter(stream))
+                {
+                    writer.WriteBytes(data);
+                    await writer.StoreAsync();
+                    await writer.FlushAsync();
+                    writer.DetachStream();
+                }
+
+                stream.Seek(0);
+                await bitmapImage.SetSourceAsync(stream);
+            }
+
+            return bitmapImage;
+        }
+
+        public string ContentType { get; set; }
+
+        public byte[] FileContents { get; set; }
+
+        public override string ToString()
+        {
+            return $"data:{ContentType};base64,{Convert.ToBase64String(FileContents)}";
+        }
     }
 }
