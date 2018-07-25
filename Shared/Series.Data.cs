@@ -63,7 +63,6 @@
 
         public string Label { get; set; }
         public double Value { get; set; }
-        public Color FillColor { get; set; }
 
         public int CategoryIndex { get; set; } = 1;
 

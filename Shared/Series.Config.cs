@@ -29,8 +29,6 @@
             RenderMethod = renderMethod;
         }
 
-        public bool IsLabelsEnabled { get; set; } = true;
-
         public Color Color { get; set; }
         public Color Color2 { get; set; }
         public double Limit { get; set; }
