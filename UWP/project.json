@@ -3,7 +3,8 @@
     "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.4",
     "OxyPlot.Core": "1.0.0",
     "OxyPlot.Windows": "1.0.0",
-    "Zebble": "4.4.108"
+    "Zebble": "4.4.122",
+    "Zebble.WebView": "4.2.239"
   },
   "frameworks": {
     "uap10.0.10240": {}

@@ -70,9 +70,6 @@
                     data = items.Aggregate(data, (current, item) => current + ((int)(item.Value / total * 100) + ","));
                     foreach (var slice in items)
                     {
-                        /* remove this after fill color problem fixed */
-                        slice.Fill = OxyColor.FromArgb(255, (byte)rng.Next(0, 255), (byte)rng.Next(0, 255), (byte)rng.Next(0, 255));
-                        /* */
                         labels += $"'{slice.Label}',";
                         colors += $"'rgba({slice.Fill.R}, {slice.Fill.G}, {slice.Fill.B}, {slice.Fill.A / (float)byte.MaxValue})',";
                     }
