@@ -13,6 +13,7 @@ namespace Zebble
         public async Task<UIKit.UIView> Render(Renderer renderer)
         {
             View = (OxyPlotView)renderer.View;
+            await View.InitializePlot();
             Result = new PlotView
             {
                 Model = View.OxyplotModel,
