@@ -32,7 +32,10 @@
                 var native = await webView.Render();
                 var result = native.Native();
                 RenderedWebView = (Windows.UI.Xaml.Controls.WebView)VisualTreeHelper.GetChild(result, 0);
+
+                RenderedWebView.LoadCompleted -= RenderedWebView_LoadCompleted;
                 RenderedWebView.LoadCompleted += RenderedWebView_LoadCompleted;
+
                 GridView.Children.Add(result);
 
                 return GridView;
@@ -47,7 +50,14 @@
 
         private async void RenderedWebView_LoadCompleted(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
         {
-            var base64Content = await RenderedWebView.InvokeScriptAsync("eval", new[] { "document.getElementById(\'testLink\').href" });
+            var base64Content = await RenderedWebView.InvokeScriptAsync("eval", new[] { "createBase64Image()" });
+
+            if (base64Content == "" || base64Content == "data:,")
+            {
+                await RenderedWebView.InvokeScriptAsync("eval", new[] { "hideImageHolder()" });
+                return;
+            }
+
             var imageView = new ImageView { ImageData = Base64Image.Parse(base64Content).FileContents };
             var native = (await imageView.Render()).Native();
             GridView.Children.RemoveAt(0);
@@ -91,7 +101,6 @@
     </div>
 <div id='image-holder'>
     <img style='width:{100}%' id='chartImage' />
-    <a id='testLink'> Download </a>
 </div>
     <script>
         var config =
@@ -101,24 +110,14 @@
             {{
                 datasets:[
                 {{
-                    data:[{data}],
-                    backgroundColor:[{colors}],label:'{model.Title}'
+                    data:[{data.Substring(0, data.Length - 1)}],
+                    backgroundColor:[{colors.Substring(0, colors.Length - 1)}],label:'{model.Title}'
                 }}],
-                labels: [{labels}]
+                labels: [{labels.Substring(0, labels.Length - 1)}]
             }},
             options: 
             {{
-                animation: 
-                {{
-					duration: 0,
-					onComplete: function(animation) 
-                    {{
-					    var url_base64 = document.getElementById('chart-area').toDataURL('image/png');
-						document.getElementById('canvas-holder').hidden = true;
-						document.getElementById('chartImage').src = url_base64;
-                        document.getElementById('testLink').href = url_base64;
-            		}}
-				}},
+                animation: false,
     	        legend: {{display: false}},
                 rotation: (-0.3 * Math.PI),
                 elements: 
@@ -130,11 +129,27 @@
                 }}
             }}
         }};
+        window.onerror = function (msg, url, lineNo, columnNo, error) 
+        {{       
+            return false;
+        }}
         window.onload = function()
         {{
             var ctx =document.getElementById('chart-area').getContext('2d');
             window.myPie=new Chart(ctx, config);
         }};
+
+        function createBase64Image(){{
+            var url_base64 = document.getElementById('chart-area').toDataURL('image/png');
+            document.getElementById('chartImage').src = url_base64;
+            
+            return url_base64;
+        }};
+
+        function hideImageHolder(){{
+            document.getElementById('chartImage').hidden = true;
+        }};
+
         function dataURItoBlob(dataURI) 
         {{
     		var binary = atob(dataURI.split(',')[1]);
@@ -157,11 +172,6 @@
     {
         public static Base64Image Parse(string base64Content)
         {
-            if (string.IsNullOrEmpty(base64Content))
-            {
-                throw new ArgumentNullException(nameof(base64Content));
-            }
-
             int indexOfSemiColon = base64Content.IndexOf(";", StringComparison.OrdinalIgnoreCase);
 
             string dataLabel = base64Content.Substring(0, indexOfSemiColon);
