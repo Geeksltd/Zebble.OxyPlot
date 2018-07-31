@@ -27,14 +27,13 @@
             {
                 View = (OxyPlotView)renderer.View;
                 await View.InitializePlot();
-                var webView = new WebView { Html = GetHtml(View.OxyplotModel) };
 
-                var native = await webView.Render();
-                var result = native.Native();
-                RenderedWebView = (Windows.UI.Xaml.Controls.WebView)VisualTreeHelper.GetChild(result, 0);
+                var result = new Windows.UI.Xaml.Controls.WebView();
+                result.NavigateToString(GetHtml(View.OxyplotModel));
+                RenderedWebView = result;
 
-                RenderedWebView.LoadCompleted -= RenderedWebView_LoadCompleted;
-                RenderedWebView.LoadCompleted += RenderedWebView_LoadCompleted;
+                result.LoadCompleted -= RenderedWebView_LoadCompleted;
+                result.LoadCompleted += RenderedWebView_LoadCompleted;
 
                 GridView.Children.Add(result);
 
