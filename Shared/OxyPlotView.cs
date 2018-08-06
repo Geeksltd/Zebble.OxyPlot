@@ -140,7 +140,8 @@
             {
                 MarkerType = MarkerType.Circle,
                 MarkerSize = 4,
-                MarkerStroke = OxyColors.White
+                MarkerStroke = OxyColors.White,
+                Color = plot.Config?.Color?.ToOxyColor() ?? OxyColors.White
             };
 
             foreach (var point in plot.Data) lineSeries.Points.Add(new DataPoint(point.X, point.Y));
