@@ -63,7 +63,6 @@ public override async Task OnInitializing()
     };
     
     plotView.Width(100.Percent()).Height(300);
-    await plotView.InitializePlot();
     await Add(plotView);
 }
 ```
