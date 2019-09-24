@@ -159,9 +159,10 @@
             if (!plot.Config.IsLabelsEnabled)
             {
                 pieSeries.OutsideLabelFormat = "";
-                pieSeries.TickHorizontalLength = 0.00;
-                pieSeries.TickRadialLength = 0.00;
+                pieSeries.TickHorizontalLength = 0;
+                pieSeries.TickRadialLength = 0;
                 pieSeries.InsideLabelFormat = "";
+                pieSeries.StrokeThickness = 0;
             }
 
             Model.Series.Add(pieSeries);
