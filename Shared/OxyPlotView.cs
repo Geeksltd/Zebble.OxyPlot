@@ -8,7 +8,7 @@
 
     public class OxyPlotView : View, IRenderedBy<OxyPlotViewRenderer>
     {
-        internal PlotModel OxyplotModel { get; set; }
+        public PlotModel Model { get; } = new PlotModel();
 
         public string Title { get; set; }
 
@@ -20,7 +20,7 @@
         {
             try
             {
-                OxyplotModel = new PlotModel { Title = Title };
+                Model.Title = Title;
 
                 if (Series == null && Axes == null)
                 {
@@ -84,7 +84,7 @@
                     }
 
                     if (Axes != null)
-                        foreach (var axis in Axes) OxyplotModel.Axes.Add(axis);
+                        foreach (var axis in Axes) Model.Axes.Add(axis);
 
                     await Task.CompletedTask;
                 }
@@ -105,7 +105,7 @@
             };
 
             foreach (var point in plot.Data) twoColorAreaSeries.Points.Add(new DataPoint(point.X, point.Y));
-            OxyplotModel.Series.Add(twoColorAreaSeries);
+            Model.Series.Add(twoColorAreaSeries);
 
             return Task.CompletedTask;
         }
@@ -114,7 +114,7 @@
         {
             var areaSeries = new AreaSeries();
             foreach (var point in plot.Data) areaSeries.Points.Add(new DataPoint(point.X, point.Y));
-            OxyplotModel.Series.Add(areaSeries);
+            Model.Series.Add(areaSeries);
 
             return Task.CompletedTask;
         }
@@ -129,7 +129,7 @@
             };
 
             foreach (var point in plot.Data) twoColorLineSeries.Points.Add(new DataPoint(point.X, point.Y));
-            OxyplotModel.Series.Add(twoColorLineSeries);
+            Model.Series.Add(twoColorLineSeries);
 
             return Task.CompletedTask;
         }
@@ -145,7 +145,7 @@
             };
 
             foreach (var point in plot.Data) lineSeries.Points.Add(new DataPoint(point.X, point.Y));
-            OxyplotModel.Series.Add(lineSeries);
+            Model.Series.Add(lineSeries);
 
             return Task.CompletedTask;
         }
@@ -164,7 +164,7 @@
                 pieSeries.InsideLabelFormat = "";
             }
 
-            OxyplotModel.Series.Add(pieSeries);
+            Model.Series.Add(pieSeries);
 
             return Task.CompletedTask;
         }
@@ -173,7 +173,7 @@
         {
             var barSeries = new BarSeries();
             foreach (var item in plot.Data) barSeries.Items.Add(new BarItem(item.Value, item.CategoryIndex));
-            OxyplotModel.Series.Add(barSeries);
+            Model.Series.Add(barSeries);
 
             return Task.CompletedTask;
         }
@@ -182,7 +182,7 @@
         {
             var errorColumn = new ErrorColumnSeries();
             foreach (var item in plot.Data) errorColumn.Items.Add(new ColumnItem(item.Value, item.CategoryIndex));
-            OxyplotModel.Series.Add(errorColumn);
+            Model.Series.Add(errorColumn);
 
             return Task.CompletedTask;
         }
@@ -191,7 +191,7 @@
         {
             var barSeries = new ColumnSeries();
             foreach (var item in plot.Data) barSeries.Items.Add(new ColumnItem(item.Value, item.CategoryIndex));
-            OxyplotModel.Series.Add(barSeries);
+            Model.Series.Add(barSeries);
 
             return Task.CompletedTask;
         }
@@ -200,7 +200,7 @@
         {
             var boxSeries = new BoxPlotSeries();
             foreach (var item in plot.Data) boxSeries.Items.Add(new BoxPlotItem(item.X, item.LowerWhisker, item.BoxBottom, item.Median, item.BoxTop, item.UpperWhisker));
-            OxyplotModel.Series.Add(boxSeries);
+            Model.Series.Add(boxSeries);
 
             return Task.CompletedTask;
         }
@@ -213,7 +213,7 @@
                 ColumnCoordinates = plot.Config.ColumnCoordinates,
                 RowCoordinates = plot.Config.RowCoordinates
             };
-            OxyplotModel.Series.Add(contourSeries);
+            Model.Series.Add(contourSeries);
 
             return Task.CompletedTask;
         }
@@ -223,7 +223,7 @@
             var rectangleBarSeries = new RectangleBarSeries { Title = plot.Config.Title };
 
             foreach (var item in plot.Data) rectangleBarSeries.Items.Add(new RectangleBarItem(item.X0, item.Y0, item.X1, item.Y1));
-            OxyplotModel.Series.Add(rectangleBarSeries);
+            Model.Series.Add(rectangleBarSeries);
 
             return Task.CompletedTask;
         }
@@ -232,7 +232,7 @@
         {
             var candleStickSeries = new CandleStickSeries();
             foreach (var item in plot.Data) candleStickSeries.Items.Add(new HighLowItem(item.X, item.High, item.Low, item.Open, item.Close));
-            OxyplotModel.Series.Add(candleStickSeries);
+            Model.Series.Add(candleStickSeries);
 
             return Task.CompletedTask;
         }
@@ -249,7 +249,7 @@
                 Interpolate = plot.Config.Interpolate,
                 RenderMethod = plot.Config.RenderMethod
             };
-            OxyplotModel.Series.Add(heatMapSeries);
+            Model.Series.Add(heatMapSeries);
 
             return Task.CompletedTask;
         }
@@ -258,7 +258,7 @@
         {
             var highLowSeries = new HighLowSeries();
             foreach (var item in plot.Data) highLowSeries.Items.Add(new HighLowItem(item.X, item.High, item.Low, item.Open, item.Close));
-            OxyplotModel.Series.Add(highLowSeries);
+            Model.Series.Add(highLowSeries);
 
             return Task.CompletedTask;
         }
@@ -267,7 +267,7 @@
         {
             var intervalBarSeries = new IntervalBarSeries();
             foreach (var item in plot.Data) intervalBarSeries.Items.Add(new IntervalBarItem(item.Start, item.End, item.Title));
-            OxyplotModel.Series.Add(intervalBarSeries);
+            Model.Series.Add(intervalBarSeries);
 
             return Task.CompletedTask;
         }
@@ -276,7 +276,7 @@
         {
             var scatterSeries = new ScatterSeries();
             foreach (var item in plot.Data) scatterSeries.Points.Add(new ScatterPoint(item.X, item.Y, item.Size, item.Value, item.Tag));
-            OxyplotModel.Series.Add(scatterSeries);
+            Model.Series.Add(scatterSeries);
 
             return Task.CompletedTask;
         }

@@ -29,7 +29,7 @@
                 await View.InitializePlot();
 
                 var result = new Windows.UI.Xaml.Controls.WebView();
-                result.NavigateToString(GetHtml(View.OxyplotModel));
+                result.NavigateToString(GetHtml(View.Model));
                 RenderedWebView = result;
 
                 result.LoadCompleted -= RenderedWebView_LoadCompleted;

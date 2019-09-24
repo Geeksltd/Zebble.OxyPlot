@@ -1,15 +1,14 @@
 namespace Zebble
 {
+    using OxyPlot.Xamarin.Android;
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
-    using OxyPlot.Xamarin.Android;
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class OxyPlotViewRenderer : INativeRenderer
     {
         OxyPlotView View;
-        PlotView Result;
 
         static int NextId;
 
@@ -19,12 +18,7 @@ namespace Zebble
             {
                 View = (OxyPlotView)renderer.View;
                 await View.InitializePlot();
-                Result = new PlotView(Renderer.Context)
-                {
-                    Model = View.OxyplotModel,
-                };
-
-                return Result;
+                return new PlotView(Renderer.Context) { Model = View.Model };
             }
             catch (Exception ex)
             {
@@ -32,6 +26,7 @@ namespace Zebble
                 return null;
             }
         }
+
         int FindFreeId()
         {
             NextId++;

@@ -1,14 +1,20 @@
 ﻿namespace Zebble
 {
     using Android.Content;
+    using Android.Runtime;
     using Android.Views;
     using Android.Widget;
+    using System;
 
     internal class OxyPlotViewLayout : FrameLayout
     {
         ScrollView ScrollView;
 
+        [Preserve]
         public OxyPlotViewLayout(Context context) : base(context) { }
+
+        [Preserve]
+        public OxyPlotViewLayout(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer) { }
 
         public override bool DispatchTouchEvent(MotionEvent ev)
         {
@@ -26,6 +32,7 @@
                 default:
                     break;
             }
+
             return base.DispatchTouchEvent(ev);
         }
 

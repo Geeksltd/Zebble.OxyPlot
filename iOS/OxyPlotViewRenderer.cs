@@ -16,7 +16,7 @@ namespace Zebble
             await View.InitializePlot();
             Result = new PlotView
             {
-                Model = View.OxyplotModel,
+                Model = View.Model,
             };
 
             return Result;
