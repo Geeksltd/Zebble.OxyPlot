@@ -4,13 +4,18 @@ namespace Zebble
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using Android.Runtime;
 
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Preserve]
     public class OxyPlotViewRenderer : INativeRenderer
     {
         OxyPlotView View;
 
         static int NextId;
+
+        [Preserve]
+        public OxyPlotViewRenderer() { }
 
         public async Task<Android.Views.View> Render(Renderer renderer)
         {

@@ -6,6 +6,7 @@
     using Android.Widget;
     using System;
 
+    [Preserve]
     internal class OxyPlotViewLayout : FrameLayout
     {
         ScrollView ScrollView;
