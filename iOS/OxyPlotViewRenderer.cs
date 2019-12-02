@@ -3,6 +3,7 @@ namespace Zebble
     using System.ComponentModel;
     using System.Threading.Tasks;
     using OxyPlot.Xamarin.iOS;
+    using System;
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class OxyPlotViewRenderer : INativeRenderer
@@ -14,14 +15,13 @@ namespace Zebble
         {
             View = (OxyPlotView)renderer.View;
             await View.InitializePlot();
-            Result = new PlotView
-            {
-                Model = View.Model,
-            };
-
-            return Result;
+            return Result = new PlotView { Model = View.Model, BackgroundColor = renderer.View.BackgroundColor.Render() };
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            try { Result?.Dispose(); }
+            catch { }
+        }
     }
 }

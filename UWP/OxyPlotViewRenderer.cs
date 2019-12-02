@@ -87,14 +87,14 @@
                     throw new NotImplementedException("The renderer for other charts has not been implemented yet");
             }
             var html = $@"
-<html>
+<html style='background:{View.BackgroundColor};'>
 <head>
 <title>{model.Title}</title>
 <script src='http://www.chartjs.org/dist/2.7.2/Chart.bundle.js'></script>
 <script src='http://www.chartjs.org/samples/latest/utils.js'></script>
 <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.10/css/all.css' integrity='sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg' crossorigin='anonymous'>
 </head>
-<body>
+<body style='background:{View.BackgroundColor};'>
 <div id='canvas-holder' style='width:{100}%'>
     <canvas id='chart-area'></canvas>
     </div>
