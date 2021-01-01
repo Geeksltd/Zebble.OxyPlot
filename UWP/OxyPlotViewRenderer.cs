@@ -2,7 +2,6 @@
 {
     using Windows.Storage.Streams;
     using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Media;
     using Windows.UI.Xaml.Media.Imaging;
     using OxyPlot.Windows;
     using System.ComponentModel;
@@ -47,7 +46,7 @@
 
         }
 
-        private async void RenderedWebView_LoadCompleted(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
+        async void RenderedWebView_LoadCompleted(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
         {
             var base64Content = await RenderedWebView.InvokeScriptAsync("eval", new[] { "createBase64Image()" });
 

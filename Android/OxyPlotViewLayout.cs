@@ -7,7 +7,7 @@
     using System;
 
     [Preserve]
-    internal class OxyPlotViewLayout : FrameLayout
+    class OxyPlotViewLayout : FrameLayout
     {
         ScrollView ScrollView;
 
