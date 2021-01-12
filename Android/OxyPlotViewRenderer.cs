@@ -5,6 +5,7 @@ namespace Zebble
     using System.ComponentModel;
     using System.Threading.Tasks;
     using Android.Runtime;
+    using Olive;
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Preserve]
@@ -27,7 +28,7 @@ namespace Zebble
             }
             catch (Exception ex)
             {
-                Device.Log.Error(ex.Message);
+                Log.For(this).Error(ex);
                 return null;
             }
         }

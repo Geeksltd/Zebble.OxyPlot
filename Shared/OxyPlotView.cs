@@ -5,6 +5,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Olive;
 
     public class OxyPlotView : View, IRenderedBy<OxyPlotViewRenderer>
     {
@@ -24,7 +25,7 @@
 
                 if (Series == null && Axes == null)
                 {
-                    Device.Log.Error("Series or Axes of plot is null");
+                    Log.For(this).Error(null, "Series or Axes of plot is null");
                     return;
                 }
 
@@ -91,7 +92,7 @@
             }
             catch (Exception ex)
             {
-                Device.Log.Error(ex);
+                Log.For(this).Error(ex);
             }
         }
 

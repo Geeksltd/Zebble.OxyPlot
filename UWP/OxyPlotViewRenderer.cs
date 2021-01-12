@@ -11,6 +11,7 @@
     using System.Linq;
     using OxyPlot;
     using OxyPlot.Series;
+    using Olive;
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class OxyPlotViewRenderer : INativeRenderer
@@ -40,7 +41,7 @@
             }
             catch (Exception ex)
             {
-                Device.Log.Error(ex.Message);
+                Log.For(this).Error(ex);
                 return null;
             }
 
