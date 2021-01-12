@@ -25,7 +25,7 @@
 
                 if (Series == null && Axes == null)
                 {
-                    Log.For(this).Error(null, "Series or Axes of plot is null");
+                    Log.For(this).Error("Series or Axes of plot is null");
                     return;
                 }
 
